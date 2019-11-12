@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final Color bgColor = Color(0xFF4A4A58);
+final Color bgColor = Colors.white;
 
 class MenuDashBoardpage extends StatefulWidget {
  @override
@@ -24,8 +24,8 @@ class MenuDashBoardpage extends StatefulWidget {
       super.initState();
       _controller = AnimationController(vsync: this,duration: duration);
       _scaleAnimation = Tween<double>(begin: 1,end:0.6 ).animate(_controller);
+      _menuScaleAnimation = Tween<double>(begin:0.5,end:1).animate(_controller);
       _slideAnimation = Tween<Offset>(begin:Offset(-1,0),end: Offset(0,0)).animate(_controller);
-      _menuScaleAnimation
     }
 
     @override
@@ -40,45 +40,36 @@ class MenuDashBoardpage extends StatefulWidget {
       Size size = MediaQuery.of(context).size;
       screenWidth = size.width;
       screenHeight = size.height;
-      return Scaffold(
-        backgroundColor: bgColor,
-        body: Stack(
-          children: <Widget>[
-            menu(context),
-            dashboard(context),
-          ],
+      return DefaultTabController(
+        length: 3,
+        child: Theme(
+          data: ThemeData(
+          brightness:Brightness.dark
         ),
-      );
-    }
+        child: Scaffold(
+          backgroundColor: bgColor,
+          bottomNavigationBar: TabBar(
+      tabs: [
+        Tab(icon: Icon(Icons.list,),text: "Туры",),
+        Tab(icon: Icon(Icons.account_circle),text:"Профиль"),
+        Tab(icon: Icon(Icons.contacts ),text:"Контакты"),
 
-
-    Widget menu(context) {
-      return SlideTransition(
-        position: _slideAnimation,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text("Актуальные туры",
-                    style: TextStyle(color: Colors.white, fontSize: 20)),
-                SizedBox(height: 10),
-                Text("Профиль",
-                    style: TextStyle(color: Colors.white, fontSize: 20)),
-                SizedBox(height: 10),
-                Text("Контакты",
-                    style: TextStyle(color: Colors.white, fontSize: 20)),
-                SizedBox(height: 10),
-              ],
-            ),
+      ],
+      unselectedLabelColor: Color(0xff999999),
+      labelColor: Colors.black,
+      indicatorColor: Colors.transparent,
+      ),
+          body: Stack(
+            children: <Widget>[
+              dashboard(context),
+            ],
           ),
         ),
+      ),
       );
     }
+
+
 
     Widget dashboard(context) {
       return AnimatedPositioned(
@@ -102,27 +93,14 @@ class MenuDashBoardpage extends StatefulWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      InkWell(
-                        child: Icon(Icons.menu, color: Colors.white),
-                        onTap: () {
-                          setState(() {
-                            if(isCollased)
-                              _controller.forward();
-                            else
-                              _controller.reverse();
-
-                            isCollased = !isCollased;
-                          });
-                        },
-                      ),
                       Text("Актуальные туры",
-                        style: TextStyle(fontSize: 24, color: Colors.white),),
-                      Icon(Icons.settings, color: Colors.white),
+                        style: TextStyle(fontSize: 18, color: Colors.black,fontFamily:"Poppins-Black",fontWeight: FontWeight.w400),),
+                      Icon(Icons.settings, color: Colors.black),
                     ],
                   ),
                   SizedBox(height: 50),
                   Container(
-                    height: 400,
+                    height: 300,
                     child: PageView(
                       controller: PageController(viewportFraction: 0.8),
                       scrollDirection: Axis.vertical,
@@ -147,7 +125,8 @@ class MenuDashBoardpage extends StatefulWidget {
                       ],
                     ),
                   )
-
+                // Text("Tra")
+                //  ListView.separated(itemBuilder: null, separatorBuilder: null, itemCount: null)
                 ],
               ),
             ),
